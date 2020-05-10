@@ -63,15 +63,14 @@ print(""" >>> bulletpoint.py <<<
       """)
 
 if not pyperclip.paste():
-    print("""[-] Copy first texts and will be converted to bullet pointed format:
-
-                 Examples:
-
-                 * Reprehenderit aute voluptate dolore et qui laborum
-                 * Excepteur qui officia ut non aute ut labore do sint non.
-                 * Lorem ipsum sit ut dolore.
-                 * Ex enim aute ut sit elit et eiusmod mollit tempor est consequat laboris.
+    print("""[-] Copy first texts and will be converted to bullet pointed format:        
+    >>> Examples <<<
+    * Reprehenderit aute voluptate dolore et qui laborum
+    * Excepteur qui officia ut non aute ut labore do sint non.
+    * Lorem ipsum sit ut dolore.
+    * Ex enim aute ut sit elit et eiusmod mollit tempor est consequat laboris.
           """)
+    sys.exit(1)
 
 
 while True:
