@@ -50,7 +50,7 @@ def bullet_point(string, text):
     lines = text.split('\n')
 
     for i in range(len(lines)):                           # loop through all indexes on the list
-        lines[i] = f"{out_string} " + lines[i]           # add asterisks in front of every line index
+        lines[i] = f"{out_string} " + lines[i]            # add asterisks in front of every line index
 
     text = '\n'.join(lines)
     return pyperclip.copy(text)
@@ -58,17 +58,17 @@ def bullet_point(string, text):
 
 # Start prompt
 print(""" >>> bulletpoint.py <<<
-    Usage: Copy first texts and will be converted to bullet pointed format
-    Useful in adding bullet points in some sentences / be it email or HTML
+Usage: Copy first texts and will be converted to bullet pointed format
+Useful in adding bullet points in some sentences / be it email or HTML
       """)
 
 if not pyperclip.paste():
     print("""[-] Copy first texts and will be converted to bullet pointed format:        
-    >>> Examples <<<
-    * Reprehenderit aute voluptate dolore et qui laborum
-    * Excepteur qui officia ut non aute ut labore do sint non.
-    * Lorem ipsum sit ut dolore.
-    * Ex enim aute ut sit elit et eiusmod mollit tempor est consequat laboris.
+>>> Examples <<<
+* Reprehenderit aute voluptate dolore et qui laborum
+* Excepteur qui officia ut non aute ut labore do sint non.
+* Lorem ipsum sit ut dolore.
+* Ex enim aute ut sit elit et eiusmod mollit tempor est consequat laboris.
           """)
     sys.exit(1)
 
@@ -77,6 +77,10 @@ while True:
     choice = input("[>] What bullet pointer do you want? [ */-/~/+/:/>/= ]: ")
     err = "[-] Kindly choose bullet points above."
 
+    if choice == "exit" or choice == "quit":
+        print("[+] Program terminated.")
+        sys.exit(0)
+
     if not choice.isdigit():
         for key, value in bullet_name.items():
             charstring.append(value)
@@ -84,7 +88,7 @@ while True:
         if choice in bullet_name or choice in charstring:
             text = pyperclip.paste()
             bullet_point(choice, text)
-            print("[+] Output saved to clipboard.")
+            print("[-] Output saved to clipboard.")
             sys.exit(0)
 
         else:

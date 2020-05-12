@@ -1,3 +1,3 @@
-# Some python scripts #
+# Python Scripts #
 
-`Scripts that maybe useful or not`
+`Scripts that are maybe useful or not`
