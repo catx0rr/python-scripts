@@ -1,29 +1,35 @@
-# Python Scripts #
+# Python 3 Scripts #
 
-`Scripts that are maybe useful or not`
+### Scripts that are maybe useful or not ###
 
-* back_to_zip.py
+* backtozip.py --
 `backup current working directory to zip file`
 
-* bulletpoint.py
+* bulletpoint.py --
 `adds bullet points in every start of the line`
 
-* index_scraper.py
+* googl.py -- 
+`google using terminal passing args and bs4 (needs bugfix)`
+
+* indexscraper.py --
 `fetch the domain names in the downloaded index.html`
 
-* multi_cb.pyw
-`stores clipboard item to shelve with key`
+* multicb.pyw --
+`stores clipboard item to shelve with key (needs bugfix)`
 
-* oswalk.py
+* oswalk.py --
 `prints all files and sub directories in the absolute path of working directory`
 
-* phone_email.py
+* pdfsniper.py --
+`extract / decrypt / encrypt pdf files (must view)`
+
+* phonemail.py --
 `regex an email or 000-000-000 numbers in the clipboard`
 
 * pw.py
 `insecure password storage (password safe concept)`
 
-* requests.py
+* req.py
 `requests module for http`
 
 * tbrowse.py
