@@ -2,6 +2,7 @@
 
 ### Extract | Crack | Encrypt | Read ###
 
+---
 
 ## NOTES ##
 
@@ -11,6 +12,8 @@
                - sudo apt-get install libpoppler-cpp-dev
         Windows: Microsoft Visual C++ 14.0
                - Get it with "Microsoft Visual C++ Build Tools": https://visualstudio.microsoft.com/downloads/`
+
+---
 
 ### !! ISSUES !! ###
     `Decrypt option: Some of encryption algorithm is not supported as per PyPDF2
@@ -25,23 +28,27 @@
         stackoverflow:
                 https://stackoverflow.com/questions/50751267/only-algorithm-code-1-and-2-are-supported`
 
+---
 
 ### !! DOCUMENTATIONS !! ###
         `PyPDF2: https://pythonhosted.org/PyPDF2/PdfFileReader.html
         pdftotext: https://pypi.org/project/pdftotext/`
 
 
+---
+
 ### EXAMPLES ###
 
-` Sample of decrypting a pdf using dictionary`
-![decrypt img](https://github.com/catx0rr/python-scripts/blob/master/pdfsniper/decrypt.png)
+* Sample of decrypting a pdf using dictionary
+![decrypt img sample](images/decrypt.png)
 
-` Password has been decrypted using a well known dictionary`
-![decrypted img](https://github.com/catx0rr/python-scripts/blob/master/pdfsniper/decrypted.png)
+* Password has been decrypted using a well known dictionary
+![decrypted img sample](images/decrypted.png)
 
-` Sample of extracted texts inside the pdf file`
-![extracted img](https://github.com/catx0rr/python-scripts/blob/master/pdfsniper/extracted.png)
+* Sample of extracted texts inside the pdf file
+![extracted img sample](images/extracted.png)
 
+---
 
 ### FUTURE UPDATES ###
 
