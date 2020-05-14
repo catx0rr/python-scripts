@@ -8,7 +8,7 @@
 
 ### DEPENDECIES
 
-#### pdfsniper pdftotext module:
+#### pdftotext module:
 
 Linux: libpoppler
 
@@ -25,6 +25,7 @@ Python:
     - ```pip3 install getpass```
 
 For Installation Issues in pikepdf:
+- Donwload Fix / Upgrade pip:
     - ```python3 -m pip install --upgrade pip```
     - ```python3 -m pip install pikepdf```
 
