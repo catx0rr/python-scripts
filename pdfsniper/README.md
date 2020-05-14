@@ -1,10 +1,12 @@
-# PDF Sniper
+# PDF Sniper 🏹
 
-## Extract | Crack | Encrypt | Read 
+## Extract 🧬 | Crack 🔓| Encrypt 🔐| Read 📖
 
 ---
 
 ## NOTES
+
+Feel free to use and modify this file. Documentations are listed [below](### DOCUMENTATIONS)
 
 ### DEPENDECIES
 
@@ -65,6 +67,7 @@ stackoverflow:
 
 - [PyPDF2](https://pythonhosted.org/PyPDF2/PdfFileReader.html)
 - [pdftotext](https://pypi.org/project/pdftotext/)
+- [pikepdf](https://pypi.org/project/pikepdf/)
 
 
 ---
@@ -84,4 +87,4 @@ Sample of readpage function as reading session inside the pdf file
 
 ### FUTURE UPDATES 
 
-~~Will add a password remover so the text can be extracted on the pdf file.~~
+~~Will add a password remover so the text can be extracted on the pdf file.~~ Done.
