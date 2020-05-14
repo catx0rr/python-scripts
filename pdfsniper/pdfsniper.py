@@ -297,8 +297,7 @@ def check_page(pagenum):
         sys.exit(1)
 
 
-if __name__ == '__main__':
-
+def main():
     if len(sys.argv) < 2:
         print(usage)
         sys.exit(1)
@@ -342,3 +341,7 @@ if __name__ == '__main__':
     else:
         print(usage)
         sys.exit(0)
+
+
+if __name__ == '__main__':
+    main()
