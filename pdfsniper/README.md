@@ -83,4 +83,4 @@ Sample of readpage function as reading session inside the pdf file
 
 ### FUTURE UPDATES 
 
-* ~~Will add a password remover so the text can be extracted on the pdf file. (Maybe) ~~ Added.
+~~Will add a password remover so the text can be extracted on the pdf file.~~
