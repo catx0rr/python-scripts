@@ -31,8 +31,8 @@
 ---
 
 ### !! DOCUMENTATIONS !! ###
-        `PyPDF2: https://pythonhosted.org/PyPDF2/PdfFileReader.html
-        pdftotext: https://pypi.org/project/pdftotext/`
+        PyPDF2: [link](https://pythonhosted.org/PyPDF2/PdfFileReader.html)
+        pdftotext: [link](https://pypi.org/project/pdftotext)
 
 
 ---
