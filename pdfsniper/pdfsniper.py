@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
 '''
-    pdfsniper.py - PDF to text. 
+    pdfsniper.py - PDF to text.
 
     | EXTRACT | CRACK | ENCRYPT | READ
-    
+
     Author: catx0rr
 
     SEE: Usage below.
@@ -15,6 +15,7 @@
                - sudo apt-get install libpoppler-cpp-dev
         Windows: Microsoft Visual C++ 14.0
                - Get it with "Microsoft Visual C++ Build Tools": https://visualstudio.microsoft.com/downloads/
+        Python3: PyPDF2, getpass, pikepdf, re and sys modules.
 
     !! ISSUES !!
     Decrypt option: Some of encryption algorithm is not supported as per PyPDF2
@@ -37,6 +38,7 @@
 
 import getpass
 import pdftotext
+import pikepdf
 import PyPDF2
 import re
 import sys
@@ -56,17 +58,20 @@ usage = '''Usage: pdf_extract.py [option] [pdffile] [option]
 help                    -- Shows the usage.
 count                   -- Count the number of pages the targeted pdf file.
 read [int]              -- Read the pdf page in the terminal. Fourth argument required as page index of 0.
+readpage                -- Read the pdf per page continuously.
 readall                 -- Print all page contents of the pdf file in the terminal.
-extract                 -- Extracts the pdf texts and output it in a text file.
-checkcrypt              -- Checks if file.pdf is encrypted.
-binextract              -- Extracts the pdf and write the binary file in a text file.
+extract                 -- Extracts all text in the pdf file and output it in a .txt file.
+checkcrypt              -- Checks if pdf file is encrypted.
+binextract              -- Extracts the pdf and writes all pdf binaries in a text file.
 encrypt                 -- Encrypts unencrypted pdf with a desired password.
-decrypt [passwd_file]   -- Decrypts the file using a password list as fourth argument passed.'''
+decrypt [passwd_file]   -- Brute forces and decrypts the file. A password file is needed in fourth argument.
+strip                   -- Strips the password on the pdf file. A password is needed in fourth argument.'''
 
 
 def count(file):
 
-    # read pdf, read as binary ('rb') and output how many pages
+    # Read pdf, read as binary ('rb') and output how many pages. Uses PyPDF2 module.
+
     try:
         with open(file, 'rb') as pdf_file:
             pdf_reader = PyPDF2.PdfFileReader(pdf_file)
@@ -83,13 +88,70 @@ def count(file):
 
 def read(file, page):
 
+    # Read every page supplied by the page number using pdftotext module. Index of zero.
+
+    prompt = '%s Opened to page: %s'
+
     try:
         with open(file, 'rb') as pdf_file:
             pdf_reader = pdftotext.PDF(pdf_file)
 
-            print(pdf_reader[page])
+            print(pdf_reader[page] + '\n\n' + prompt % (SUCCESS, page))
 
         pdf_file.close()
+
+    except pdftotext.Error:
+        print('%s Unable to read %s Please check if the file is encrypted.' % (FAILED, file))
+
+    except IndexError:
+        print('%s Page %s not found.' % (FAILED, page))
+
+    except FileNotFoundError:
+        print('%s %s not found.' % (FAILED, file)) - 9
+
+
+def read_page(file):
+
+    # Read continously per page. Uses pdftotext module.
+
+    page = 0
+
+    prompt = '%s Turned to page: %s'
+    prompt += '\n%s Type \'quit\' to end reading session'
+    prompt += '\n%s Type a page number to jump or (n/p) to turn next or previous page: '
+
+    try:
+        with open(file, 'rb') as pdf_file:
+            pdf_reader = pdftotext.PDF(pdf_file)
+
+            while True:
+                try:
+                    print(page_break + pdf_reader[page])
+
+                    # Check for page events
+                    page_num = input(prompt % (SUCCESS, page, PROMPT, PROMPT))
+
+                    if page_num == 'n':
+                        page += 1
+                        continue
+
+                    elif page_num == 'p':
+                        page -= 1
+                        continue
+
+                    elif page_num.isdigit():
+                        page = int(page_num)
+                        continue
+
+                    elif page_num == 'quit' or page_num == 'bye':
+                        break
+
+                    else:
+                        print('%s Incorrect option. press \'n\' or \'p\'.\n\n' % (FAILED))
+                        continue
+
+                except IndexError:
+                    print('%s Page %s not found.' % (FAILED, page))
 
     except pdftotext.Error:
         print('%s Unable to read %s Please check if the file is encrypted.' % (FAILED, file))
@@ -100,13 +162,15 @@ def read(file, page):
 
 def read_all(file):
 
+    # Read all the pages of pdf file using pdftotext module.
+
     try:
         with open(file, 'rb') as pdf_file:
             pdf_reader = pdftotext.PDF(pdf_file)
 
             # Iterate over the pages and print on the terminal
             for pdf_page in pdf_reader:
-                print(pdf_page)
+                print(pdf_page + page_break)
 
         pdf_file.close()
 
@@ -119,9 +183,11 @@ def read_all(file):
 
 def extract(file):
 
+    # Extracts all text in the pdf file. pdftotext module is required.
+
     name_text = file.replace('.pdf', '.txt')
 
-    print('%s Working on %s pdf file..' % (WORKING, file))
+    print('%s Working on %s file..' % (WORKING, file))
 
     try:
         with open(file, 'rb') as pdf_file, open(name_text, 'a') as text_file:
@@ -144,6 +210,8 @@ def extract(file):
 
 def check_crypt(file):
 
+    # Check if the file is password protected. PyPDF2 module is needed.
+
     try:
         with open(file, 'rb') as pdf_file:
             pdf_reader = PyPDF2.PdfFileReader(pdf_file)
@@ -162,11 +230,11 @@ def check_crypt(file):
 
 def bin_extract(file):
 
+    # Extracts the binary target pdf file and output it into a text file uses PYPDF2.
+
     name_text = file.replace('.pdf', '_bin.txt')
 
     print('%s Working on %s pdf file..' % (WORKING, file))
-
-    # Extracts the binary target pdf file and output it into a text file.
 
     try:
         with open(file, 'rb') as pdf_file:
@@ -198,7 +266,7 @@ def bin_extract(file):
 
 def decrypt(file, passwd_file):
 
-    # Open the pdf file and the password file and check for passwords inside
+    # Open the pdf file and the password file and check for passwords inside using PyPDF2 module.
 
     try:
         pdf_reader = PyPDF2.PdfFileReader(open(file, 'rb'))
@@ -229,6 +297,8 @@ def decrypt(file, passwd_file):
 
 
 def encrypt(file, password):
+
+    # Encrypts the pdf using PyPDF2 module
 
     try:
 
@@ -261,11 +331,33 @@ def encrypt(file, password):
     except FileNotFoundError:
         print('%s %s not found.' % (FAILED, file))
 
-def pass_gen():
+
+def strip(file, password):
+
+    # Removes the password of pdf using pikepdf module
+
+    try:
+
+        name_pdf = file.replace('.pdf', '_decrypted.pdf')
+
+        with pikepdf.open(file, password) as pdf_clean:
+            pdf_clean.save(name_pdf)
+
+            print('%s Successfully removed password. Saved as %s' % (SUCCESS, name_pdf))
+            pdf_clean.close()
+
+    except pikepdf._qpdf.PasswordError:
+        print('%s Unable to remove protection. Invalid password.' % (FAILED))
+
+    except FileNotFoundError:
+        print('%s %s not found.' % (FAILED, file))
+
+
+def check_pass(file):
 
     while True:
-        passwd = getpass.getpass('%s Enter password: ' % (PROMPT))
-        re_passwd = getpass.getpass('%s Confirm password: ' % (PROMPT))
+        passwd = getpass.getpass('%s Enter password for %s: ' % (PROMPT, file))
+        re_passwd = getpass.getpass('%s Confirm password for %s: ' % (PROMPT, file))
 
         if not passwd:
             print('%s Password must not be empty.' % (FAILED))
@@ -326,12 +418,16 @@ def main():
         read(sys.argv[2], check_page(sys.argv[3]))
         sys.exit(0)
 
-    elif len(sys.argv) == 3 and sys.argv[1] == 'extract':
-        extract(sys.argv[2])
+    elif len(sys.argv) == 3 and sys.argv[1] == 'readpage':
+        read_page(sys.argv[2])
         sys.exit(0)
 
     elif len(sys.argv) == 3 and sys.argv[1] == 'readall':
         read_all(sys.argv[2])
+        sys.exit(0)
+
+    elif len(sys.argv) == 3 and sys.argv[1] == 'extract':
+        extract(sys.argv[2])
         sys.exit(0)
 
     elif len(sys.argv) == 3 and sys.argv[1] == 'checkcrypt':
@@ -347,8 +443,11 @@ def main():
         sys.exit(0)
 
     elif len(sys.argv) == 3 and sys.argv[1] == 'encrypt':
-        encrypt(sys.argv[2], pass_gen())
+        encrypt(sys.argv[2], check_pass(sys.argv[2]))
         sys.exit(0)
+
+    elif len(sys.argv) == 4 and sys.argv[1] == 'strip':
+        strip(sys.argv[2], sys.argv[3])
 
     else:
         print(usage)
