@@ -34,13 +34,13 @@
 ### EXAMPLES ###
 
 ` Sample of decrypting a pdf using dictionary`
-![decrypt img](decrypt.png)
+![decrypt img](https://github.com/catx0rr/python-scripts/blob/master/pdfsniper/decrypt.png)
 
 ` Password has been decrypted using a well known dictionary`
-![decrypted img](decrypted.png)
+![decrypted img](https://github.com/catx0rr/python-scripts/blob/master/pdfsniper/decrypted.png)
 
 ` Sample of extracted texts inside the pdf file`
-![extracted img](extracted.png)
+![extracted img](https://github.com/catx0rr/python-scripts/blob/master/pdfsniper/extracted.png)
 
 
 ### FUTURE UPDATES ###
