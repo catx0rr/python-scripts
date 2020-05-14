@@ -47,17 +47,17 @@ stackoverflow:
 
 ### EXAMPLES
 
-* Sample of decrypting a pdf using dictionary
+Sample of decrypting a pdf using dictionary
 ![decrypt sample](https://github.com/catx0rr/python-scripts/blob/master/pdfsniper/images/decrypt.PNG)
 
-* Password has been decrypted using a well known dictionary
+Password has been decrypted using a well known dictionary
 ![decrypted sample](https://github.com/catx0rr/python-scripts/blob/master/pdfsniper/images/decrypted.PNG)
 
-* Sample of extracted texts inside the pdf file
+Sample of extracted texts inside the pdf file
 ![extracted sample](https://github.com/catx0rr/python-scripts/blob/master/pdfsniper/images/extracted.PNG)
 
 ---
 
 ### FUTURE UPDATES 
 
-* Will add a password remover so the text on the file can be extracted. (Maybe)
+* Will add a password remover so the text can be extracted on the pdf file. (Maybe)

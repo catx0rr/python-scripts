@@ -41,9 +41,17 @@ import PyPDF2
 import re
 import sys
 
+
+FAILED = '\033[31m[-]\033[0;0m'
+SUCCESS = '\033[32m[+]\033[0;0m'
+PROMPT = '\033[36m[>]\033[0;0m'
+WORKING = '\033[33m[*]\033[0;0m'
+
 file_gex = re.compile(r'[a-zA-Z0-9._-]+\.[a-zA-Z]')
 
-usage = '''[>] Usage: pdf_extract.py [option] [pdffile] [option]
+page_break = '\n\n-------------------------//  P A  G  E    B  R  E  A  K  //-------------------------\n\n'
+
+usage = '''Usage: pdf_extract.py [option] [pdffile] [option]
 
 help                    -- Shows the usage.
 count                   -- Count the number of pages the targeted pdf file.
@@ -62,15 +70,15 @@ def count(file):
     try:
         with open(file, 'rb') as pdf_file:
             pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-            print('[+] %s page(s) count: %s' % (file, pdf_reader.numPages))
+            print('%s %s page(s) count: %s' % (SUCCESS, file, pdf_reader.numPages))
 
         pdf_file.close()
 
     except PyPDF2.utils.PdfReadError:
-        print('[-] Unable to count %s Please check if the file is encrypted.' % (file))
+        print('%s Unable to count %s Please check if the file is encrypted.' % (FAILED, file))
 
     except FileNotFoundError:
-        print('[-] %s not found.' % (file))
+        print('%s %s not found.' % (FAILED, file))
 
 
 def read(file, page):
@@ -84,10 +92,10 @@ def read(file, page):
         pdf_file.close()
 
     except pdftotext.Error:
-        print('[-] Unable to read %s Please check if the file is encrypted.' % (file))
+        print('%s Unable to read %s Please check if the file is encrypted.' % (FAILED, file))
 
     except FileNotFoundError:
-        print('[-] %s not found.' % (file))
+        print('%s %s not found.' % (FAILED, file))
 
 
 def read_all(file):
@@ -103,17 +111,17 @@ def read_all(file):
         pdf_file.close()
 
     except pdftotext.Error:
-        print('[-] Unable to read %s Please check if the file is encrypted.' % (file))
+        print('%s Unable to read %s Please check if the file is encrypted.' % (FAILED, file))
 
     except FileNotFoundError:
-        print('[-] %s not found.' % (file))
+        print('%s %s not found.' % (FAILED, file))
 
 
 def extract(file):
 
     name_text = file.replace('.pdf', '.txt')
 
-    print('[*] Working on %s pdf file..' % (file))
+    print('%s Working on %s pdf file..' % (WORKING, file))
 
     try:
         with open(file, 'rb') as pdf_file, open(name_text, 'a') as text_file:
@@ -121,17 +129,17 @@ def extract(file):
 
             # Iterate and write on a file
             for pdf_page in pdf_reader:
-                text_file.write(pdf_page + '\n\n---------------//  P A  G  E    B  R  E  A  K  //---------------\n\n')
+                text_file.write(pdf_page + page_break)
 
         pdf_file.close()
         text_file.close()
-        print('[+] %s has been extracted to %s.' % (sys.argv[2], name_text))
+        print('%s %s has been extracted to %s.' % (SUCCESS, file, name_text))
 
     except pdftotext.Error:
-        print('[-] Unable to extract %s Please check if the file is encrypted.' % (file))
+        print('%s Unable to extract %s Please check if the file is encrypted.' % (FAILED, file))
 
     except FileNotFoundError:
-        print('[-] %s not found.' % (file))
+        print('%s %s not found.' % (FAILED, file))
 
 
 def check_crypt(file):
@@ -141,22 +149,22 @@ def check_crypt(file):
             pdf_reader = PyPDF2.PdfFileReader(pdf_file)
 
             if pdf_reader.isEncrypted:
-                print('[+] %s is password protected.' % (file))
+                print('%s %s is password protected.' % (SUCCESS, file))
 
             else:
-                print('[+] %s is not encrypted.' % (file))
+                print('%s %s is not encrypted.' % (SUCCESS, file))
 
         pdf_file.close()
 
     except FileNotFoundError:
-        print('[-] %s not found.' % (file))
+        print('%s %s not found.' % (FAILED, file))
 
 
 def bin_extract(file):
 
     name_text = file.replace('.pdf', '_bin.txt')
 
-    print('[*] Working on %s pdf file..' % (file))
+    print('%s Working on %s pdf file..' % (WORKING, file))
 
     # Extracts the binary target pdf file and output it into a text file.
 
@@ -176,16 +184,16 @@ def bin_extract(file):
         # Create a empty text file and write the pages from current pdf file
         with open(name_text, 'wb') as output_pdf:
             pdf_writer.write(output_pdf)
-            print('[+] %s extracted to %s file.' % (sys.argv[2], name_text))
+            print('%s %s extracted to %s file.' % (SUCCESS, file, name_text))
 
         output_pdf.close()
         pdf_file.close()
 
     except PyPDF2.utils.PdfReadError:
-        print('[-] Unable to extract %s Please check if the file is encrypted.' % (file))
+        print('%s Unable to extract %s Please check if the file is encrypted.' % (FAILED, file))
 
     except FileNotFoundError:
-        print('[-] %s not found.' % (file))
+        print('%s %s not found.' % (FAILED, file))
 
 
 def decrypt(file, passwd_file):
@@ -202,25 +210,26 @@ def decrypt(file, passwd_file):
                 password = line.strip()
                 if pdf_reader.decrypt(password) == 1:
                     pass_found = password
-                    print('[+] Line: %s Password found: %s' % (index, pass_found))
+                    print('%s Line: %s Password Found: %s' % (SUCCESS, index, pass_found))
                     break
 
                 else:
-                    print('[-] Line: %s No match found. yet..' % (index))
+                    print('%s Line: %s No match found. yet..' % (FAILED, index))
 
         pass_file.close()
 
     except KeyError:
-        print('[-] %s not encrypted.' % (file))
+        print('%s %s not encrypted.' % (FAILED, file))
 
     except FileNotFoundError:
-        print('[-] PDF or password file not found.')
+        print('%s PDF or password file not found.' % (FAILED))
 
     except NotImplementedError:
-        print('[-] Password Hash not supported. "only algorithm code 1 and 2 are supported" Please see issues.')
+        print('%s ERROR: Password Hash not supported. Please see issues.' % (FAILED))
 
 
 def encrypt(file, password):
+
     try:
 
         name_pdf = file.replace('.pdf', '_encrypted.pdf')
@@ -230,7 +239,7 @@ def encrypt(file, password):
         pdf_writer = PyPDF2.PdfFileWriter()
         pdf_pages = pdf_reader.getNumPages()
 
-        print('[*] Working on %s pdf file..' % (file))
+        print('%s Working on %s pdf file..' % (WORKING, file))
 
         # Get the page of loaded pdf file
         for page in range(pdf_pages):
@@ -244,51 +253,53 @@ def encrypt(file, password):
             pdf_writer.write(output_pdf)
 
         output_pdf.close()
-        print('[+] Done. %s saved on current working directory.' % (name_pdf))
+        print('%s Done. %s saved on current working directory.' % (SUCCESS, name_pdf))
 
     except PyPDF2.utils.PdfReadError:
-        print('[-] Unable to encrypt %s You cannot encrypt an unencrypted file.' % (file))
+        print('%s Unable to encrypt %s You cannot encrypt an unencrypted file.' % (FAILED, file))
 
     except FileNotFoundError:
-        print('[-] %s not found.' % (file))
+        print('%s %s not found.' % (FAILED, file))
 
 def pass_gen():
 
     while True:
-        passwd = getpass.getpass('[>] Enter password: ')
-        re_passwd = getpass.getpass('[>] Confirm password: ')
+        passwd = getpass.getpass('%s Enter password: ' % (PROMPT))
+        re_passwd = getpass.getpass('%s Confirm password: ' % (PROMPT))
 
         if not passwd:
-            print('[-] Password must not be empty.')
+            print('%s Password must not be empty.' % (FAILED))
             continue
 
         if not re_passwd:
-            print('[-] Password must not be empty.')
+            print('%s Password must not be empty.' % (FAILED))
             continue
 
         if passwd == re_passwd:
             if len(passwd) < 4:
-                print('[-] Password must be at least 4 characters.')
+                print('%s Password must be at least 4 characters.' % (FAILED))
                 continue
 
             return passwd
             break
 
         else:
-            print('[-] Passwords did not match.')
+            print('%s Passwords did not match.' % (FAILED))
 
 
 def check_pwfile(pwfile):
+
     try:
         if file_gex.search(pwfile).group():
             return pwfile
 
     except AttributeError:
-        print('[-] Invalid password file.')
+        print('%s Invalid password file.' % (FAILED))
         sys.exit(1)
 
 
 def check_page(pagenum):
+
     if pagenum.isdigit():
         return int(pagenum)
 
@@ -298,6 +309,7 @@ def check_page(pagenum):
 
 
 def main():
+
     if len(sys.argv) < 2:
         print(usage)
         sys.exit(1)

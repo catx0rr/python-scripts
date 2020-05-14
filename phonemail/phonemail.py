@@ -8,7 +8,7 @@ import sys
 
 
 phone_regex = re.compile(r'''(
-    (\d{3}|\(\d{3}\))?         # Philippine area code
+    (\d{3}|\(\d{3}\))?           # Philippine area code
     (\s|-|\.)?                   # separator
     (\d{3})                      # first 3 digits
     (\s|-|\.)                    # separator
