@@ -39,8 +39,8 @@ stackoverflow:
 
 ### DOCUMENTATIONS
 
-[PyPDF2](https://pythonhosted.org/PyPDF2/PdfFileReader.html)
-[pdftotext](https://pypi.org/project/pdftotext/)
+- [PyPDF2](https://pythonhosted.org/PyPDF2/PdfFileReader.html)
+- [pdftotext](https://pypi.org/project/pdftotext/)
 
 
 ---
