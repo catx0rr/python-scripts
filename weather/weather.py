@@ -25,9 +25,10 @@ def convert_celcius(temp):
 
 def fetch_data(location):
 
-    # Download the JSON data from OpenWeatherMap.org API
+    
+    # Register and get API key on OpenWeatherMap.org
 
-    url = 'http://api.openweathermap.org/data/2.5/weather?q=%s&appid=bb3474342a4a42f789fc69520688505b' % location
+    url = 'http://api.openweathermap.org/data/2.5/weather?q=%s&appid={API-KEY}' % location
 
     # Check response
     try:
@@ -38,15 +39,19 @@ def fetch_data(location):
         print('weather.py: error: unable to find country or city.')
         sys.exit(1)
 
+    # Download the JSON data from OpenWeatherMap.org API
     # Load JSON data to python
+
     weather_api = json.loads(response.text)
 
     # Print weather descriptions
+
     w = weather_api['weather']
     t = weather_api['main']
     x = weather_api['wind']
 
     # Convert and prepare data
+    
     weather = w[0]['main']
     description = w[0]['description'].title()
     tempc = convert_celcius(t['temp'])
@@ -73,6 +78,7 @@ def fetch_data(location):
 def main():
 
     # Create a parser
+    
     parser = argparse.ArgumentParser(
         add_help=True,
         allow_abbrev=False
@@ -91,9 +97,11 @@ def main():
     )
 
     # Parse all args
+    
     args = parser.parse_args()
 
     # Pass args to functions
+    
     if args.location and args.city:
         location = args.location.title() + ', ' + args.city.title()
         fetch_data(location)
