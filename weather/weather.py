@@ -25,10 +25,10 @@ def convert_celcius(temp):
 
 def fetch_data(location):
 
-    
     # Register and get API key on OpenWeatherMap.org
+    # Replace appid={API-key} to your API key
 
-    url = 'http://api.openweathermap.org/data/2.5/weather?q=%s&appid={API-KEY}' % location
+    url = 'http://api.openweathermap.org/data/2.5/weather?q=%s&appid={API-key}' % location
 
     # Check response
     try:
@@ -51,7 +51,7 @@ def fetch_data(location):
     x = weather_api['wind']
 
     # Convert and prepare data
-    
+
     weather = w[0]['main']
     description = w[0]['description'].title()
     tempc = convert_celcius(t['temp'])
@@ -78,10 +78,10 @@ def fetch_data(location):
 def main():
 
     # Create a parser
-    
+
     parser = argparse.ArgumentParser(
         add_help=True,
-        allow_abbrev=False
+        allow_abbrev=False,
     )
 
     parser.add_argument(
@@ -97,11 +97,11 @@ def main():
     )
 
     # Parse all args
-    
+
     args = parser.parse_args()
 
     # Pass args to functions
-    
+
     if args.location and args.city:
         location = args.location.title() + ', ' + args.city.title()
         fetch_data(location)
@@ -116,6 +116,9 @@ def main():
         location = args.city.title()
         fetch_data(location)
         sys.exit(0)
+
+    else:
+        print('Usage: weather.py --help for more info.')
 
 
 if __name__ == '__main__':
